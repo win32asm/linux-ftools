@@ -12,7 +12,9 @@
 #include <math.h>
 #include <errno.h>
 #include <locale.h>
-#include <sys/ioctl.h> 
+#include <sys/ioctl.h>
+
+void _show_headers(void);
 
 char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s %18s\n";
 char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18ld %'18ld %'18ld %18.2f\n";
@@ -264,7 +266,7 @@ void fincore(char* path,
         char buff[1024];
         sprintf( buff, "Could not mmap file: %s", path );
         perror( buff );
-        goto cleanup;      
+        goto cleanup;
     }
 
     size_t calloc_size = (file_stat.st_size+page_size-1)/page_size;
@@ -538,7 +540,7 @@ int main(int argc, char *argv[]) {
 
     struct winsize ws; 
 
-    if (ioctl(stdout,TIOCGWINSZ,&ws) == 0) { 
+    if (ioctl(STDOUT_FILENO,TIOCGWINSZ,&ws) == 0) { 
         
         if ( ws.ws_col > nr_regions ) {
             nr_regions = ((ws.ws_col/2)*2) - 10;
